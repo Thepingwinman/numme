@@ -1,5 +1,4 @@
 import requests
-import json
 
 def Get_textlist():
     webpage = requests.get('https://www.gutenberg.org/cache/epub/72142/pg72142.txt')
