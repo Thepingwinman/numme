@@ -1,0 +1,12 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+allword = []    # listan med alla möjliga ord
+lentot = len(allword)
+Markov = np.zeros((lentot, lentot))     # Skapar matris med enbart 0or
+
+for word1 in worddict.keys():
+    # for-loop genom 
+    tot = sum(worddict.get(word1).values())
+    for word in word1.keys():
+        Markov[allword.index(word), allword.index(word1)] = word1[word]/tot
