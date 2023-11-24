@@ -2,14 +2,22 @@ import requests
 import PyPDF2
 
 
-def get_textlist():
+def get_unique_text_list():
+    '''
+    Reads all pages of a pdf-file and prints a list with all words that occur, without repetition.
+    
+    Parameters: none.
+
+    Return values: none.
+    '''
+
     webpage = requests.get('https://www.gutenberg.org/cache/epub/72142/pg72142.txt')
     webpage_words = webpage.text.split()
     webpage_words.sort()
     #print(webpage_words)
     #print(len(webpage_words))
     amount_of_words_in_dok = len(webpage_words)
-    definitiv_list = []
+    unique_list = []
 
     test_list = ['a', 'a', 'a', 'a', '123453', 'g', 'g', 'asdfg', 'dfghjk', 't', 't', 't', 'o']
     test_list.sort()
@@ -30,7 +38,7 @@ def get_textlist():
             actual_word = webpage_words[i]"""
 
         
-    print(definitiv_list)
+    print(unique_list)
 
 def read_pdf_list(pdf):
     pdfFileObj = open(pdf, 'rb')
