@@ -9,3 +9,11 @@ for word1 in worddict:
     tot = sum(worddict.get(word1).values())
     for word in worddict.get(word1).keys():
         Markov[allword.index(word), allword.index(word1)] = worddict.get(word1)[word]/tot
+
+
+prevword = input('Write word ')
+if prevword in allword:     # Kollar efterföljande ord
+    TMarkov = np.transpose(Markov)
+    listprob = TMarkov[allword.index(prevword)] # lista med sannolikheter för transponerad matris
+    maxpos = next(i for i, x in enumerate(listprob) if x == listprob.max()) # index för max
+    nextword = allword[maxpos]    # Hittar det ord med störst sannolikhet att komma näst
