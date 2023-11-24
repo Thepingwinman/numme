@@ -23,37 +23,15 @@ def get_unique_word_list(word_list):
 
         word = word_list[i]
 
-        word = word.strip('.?!-)(][_/|,"“”:}{;—')
+        word = word_list[i]
+
+        word = word.strip('.?!-)(][_/|,"“”:}{;—<>@')
 
         word = word.strip("'")
 
-        '''         
-        #Remove special chars
-        char_list = []
-
-        for char in word_list[i]:
-            char_list.append(char)
-
-        if TEST:
-            print(char_list)
-        
-        for char in char_list:
-            if TEST:
-                print(f'char: {char}')
-            while char in special_chars:
-                try:
-                    char_list.remove(char)
-                except:
-                    break
-        
-        word = ''.join(char_list)
-
-        char_list.clear()
-        '''
-
         #Create unique list
         if word != actual_word:
-            unique_word_list.append(word_list[i])
+            unique_word_list.append(word)
             actual_word = word
 
     if TEST:
