@@ -2,7 +2,7 @@ import requests
 import PyPDF2
 
 
-def get_unique_text_list():
+def ge_unik_text_lista():
     '''
     Reads all pages of a pdf-file and prints a list with all words that occur, without repetition.
     
@@ -34,24 +34,36 @@ def get_unique_text_list():
 
     """for i in range(amount_of_words_in_dok):
         if webpage_words[i] != actual_word:
-            definitiv_list.append(webpage_words[i])
+            unique_list.append(webpage_words[i])
             actual_word = webpage_words[i]"""
 
         
     print(unique_list)
 
-def read_pdf_list(pdf):
-    pdfFileObj = open(pdf, 'rb')
-    pdfReader = PyPDF2.PdfReader(pdfFileObj)
-    ant_sidor = len(pdfReader.pages)
-    pg_lista = []
-    for i in range(ant_sidor):
+def get_word_list(pdf):
+    '''Reads pdf-file and returns list of all words that occure.
+    
+    Parameters: pdf (str): the name of the pdf-file.
+    
+    Return values: word_list (list): list of all words that occur in the pdf-file.'''
+
+    pdf_obj = open(pdf, 'rb')
+    pdfReader = PyPDF2.PdfReader(pdf_obj)
+    number_of_pages = len(pdfReader.pages)
+    
+    word_matrix = []
+
+    for i in range(number_of_pages):
         page_obj = pdfReader.pages[i]
         text = page_obj.extract_text()
-        pg_lista.append(text.split())
-    text_lista = []
-    [text_lista.extend(el) for el in pg_lista]
-    print(text_lista)
+        word_matrix.append(text.split())
+    
+    word_list = []
+    [word_list.extend(el) for el in word_matrix]
+    
+    print(word_list)
+
+    return word_list
 
 def binsok(lista, element):
     '''Kollar om ett element finns i en lista mha binärsökning.
@@ -76,6 +88,6 @@ def binsok(lista, element):
             return True
     return False
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     #get_textlist()
-    read_pdf_list("text_data.pdf")
+    get_word_list('text_data.pdf')
