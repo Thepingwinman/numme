@@ -1,44 +1,66 @@
-import requests
 import PyPDF2
 
+TEST = True
 
-def ge_unik_text_lista():
+def get_unique_word_list(word_list):
     '''
-    Reads all pages of a pdf-file and prints a list with all words that occur, without repetition.
-    
-    Parameters: none.
+    Given a list, this function returns a list with the same elements, but without repetition. (That is, elements that occur multiple times in word_list will only
+    occur one time in the unique_word_list that this function returns.)
 
-    Return values: none.
+    Parameters: word_list (list): list of words (strings) that may include repetitions.
+
+    Return values: unique_word_list (list): list of words (strings) that does not include repetitions.
     '''
+    word_list.sort()
 
-    webpage = requests.get('https://www.gutenberg.org/cache/epub/72142/pg72142.txt')
-    webpage_words = webpage.text.split()
-    webpage_words.sort()
-    #print(webpage_words)
-    #print(len(webpage_words))
-    amount_of_words_in_dok = len(webpage_words)
-    unique_list = []
-
-    test_list = ['a', 'a', 'a', 'a', '123453', 'g', 'g', 'asdfg', 'dfghjk', 't', 't', 't', 'o']
-    test_list.sort()
-
-    pdfFileObj = open('text_data.pdf', 'rb')
-    pdfReader = PyPDF2.PdfReader(pdfFileObj)
-    pageObj = pdfReader.pages[34]
-    print(pageObj.extract_text())
-    pdfFileObj.close()
-
-    test_list_words = len(test_list)
+    unique_word_list = []
 
     actual_word = ''
 
-    """for i in range(amount_of_words_in_dok):
-        if webpage_words[i] != actual_word:
-            unique_list.append(webpage_words[i])
-            actual_word = webpage_words[i]"""
+    special_chars = ['.', '?', '!', '-', ')', '(', '[', ']', '_', '\\', '/', '|', ',', '"', "'", '“', '”', ':', '{', '}', '—', ';']
 
+    for i in range(len(word_list)): 
+
+        word = word_list[i]
+
+        word = word.strip('.?!-)(][_/|,"“”:}{;—')
+
+        word = word.strip("'")
+
+        '''         
+        #Remove special chars
+        char_list = []
+
+        for char in word_list[i]:
+            char_list.append(char)
+
+        if TEST:
+            print(char_list)
         
-    print(unique_list)
+        for char in char_list:
+            if TEST:
+                print(f'char: {char}')
+            while char in special_chars:
+                try:
+                    char_list.remove(char)
+                except:
+                    break
+        
+        word = ''.join(char_list)
+
+        char_list.clear()
+        '''
+
+        #Create unique list
+        if word != actual_word:
+            unique_word_list.append(word_list[i])
+            actual_word = word
+
+    if TEST:
+        print(f'\n{unique_word_list}\n')
+        print(f'\nLength of unique_word_list: {len(unique_word_list)}\n')
+
+    return unique_word_list
 
 def get_word_list(pdf):
     '''Reads pdf-file and returns list of all words that occure.
@@ -61,7 +83,9 @@ def get_word_list(pdf):
     word_list = []
     [word_list.extend(el) for el in word_matrix]
     
-    print(word_list)
+    if TEST:
+        print(f'\n{word_list}\n')
+        print(f'\nLength of word_list: {len(word_list)}\n')
 
     return word_list
 
@@ -89,5 +113,5 @@ def binsok(lista, element):
     return False
 
 if __name__ == '__main__':
-    #get_textlist()
-    get_word_list('text_data.pdf')
+    word_list = get_word_list('text_data.pdf')
+    unique_word_list = get_unique_word_list(word_list)
