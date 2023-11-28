@@ -1,7 +1,25 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-allword = []    # listan med alla möjliga ord
+allword = []    # listan med alla unika ord
+textlist = []    # listan med texten i listform
+
+indexlist = []
+worddict = dict()
+for word in allword:
+    indexlist.append([i for i, x in enumerate(textlist) if x == word])
+
+for inde in range(len(indexlist)):
+    listnext = []
+    smalldict = dict()
+    for i in indexlist[inde]:
+	    if i != len(textlist)-1:
+		    listnext.append(textlist[i+1])
+    listnextuni = list(dict.fromkeys(listnext))
+    for i in listnextuni:
+        smalldict[i] = listnext.count(i)
+    worddict[allword[inde]] = smalldict
+
 lentot = len(allword)
 Markov = np.zeros((lentot, lentot))     # Skapar matris med enbart 0or
 
