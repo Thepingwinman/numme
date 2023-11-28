@@ -25,10 +25,6 @@ def get_unique_word_list(word_list):
 
         word = word_list[i]
 
-        word = word.strip('.?!-)(][_/|,"“”:}{;—<>@')
-
-        word = word.strip("'")
-
         #Create unique list
         if word != actual_word:
             unique_word_list.append(word)
@@ -60,35 +56,15 @@ def get_word_list(pdf):
     
     word_list = []
     [word_list.extend(el) for el in word_matrix]
-    
+
+    for i in range(len(word_list)):
+        word_list[i] = word_list[i].strip('.?!-)(][_/|,"“”:}{;—<>@').strip("'")
+     
     if TEST:
         print(f'\n{word_list}\n')
         print(f'\nLength of word_list: {len(word_list)}\n')
 
     return word_list
-
-def binsok(lista, element):
-    '''Kollar om ett element finns i en lista mha binärsökning.
-
-    Parametrar:
-    lista (list): listan som undersöks
-    elem (str): vi vill se om detta element finns i listan.
-
-    Returvärden: ett booleskt värde beroende på om elementet finns i listan eller ej.'''
-    lista.sort()
-    
-    lo = 0
-    hi = len(lista)-1
-    while lo <= hi:
-        mid = (lo+hi)//2
-        #print(f'\n{lista[mid]}\n')
-        if element < lista[mid]:
-            hi = mid - 1
-        elif element > lista[mid]:
-            lo = mid + 1
-        else:
-            return True
-    return False
 
 if __name__ == '__main__':
     word_list = get_word_list('text_data.pdf')
