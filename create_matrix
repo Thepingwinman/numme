@@ -13,7 +13,10 @@ for word1 in worddict:
 
 prevword = input('Write word ')
 if prevword in allword:     # Kollar efterföljande ord
-    TMarkov = np.transpose(Markov)
-    listprob = TMarkov[allword.index(prevword)] # lista med sannolikheter för transponerad matris
-    maxpos = next(i for i, x in enumerate(listprob) if x == listprob.max()) # index för max
-    nextword = allword[maxpos]    # Hittar det ord med störst sannolikhet att komma näst
+    wordvector = np.zeros((lentot,1))
+    wordvector[allword.index(prevword),0] = 1
+    for n in range(3):
+        wordvector = Markov.dot(wordvector)
+        maxpos = next(i for i, x in enumerate(wordvector) if x == wordvector.max())
+        nextword = allword[maxpos]
+        print(nextword)
