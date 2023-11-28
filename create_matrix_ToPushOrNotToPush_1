@@ -1,0 +1,41 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+
+'''Test dictionary...'''
+nrdict_och = {'sedan': 7, 'därefter': 8}
+nrdict_jag = {'hoppade': 3, 'simmade': 5, 'drunknade': 12, }
+worddict = {'Jag': nrdict_jag, 'Jag': nrdict_jag, 'Jag': nrdict_jag, 'Jag': nrdict_jag, 'och': nrdict_och, 'och': nrdict_och}
+
+def counting_words(worddict, allword, markov):
+    for word1 in worddict:
+        tot = sum(worddict.get(word1).values())
+        for counter in worddict.get(word1).keys():
+            markov[allword.index(counter), allword.index(word1)] = worddict.get(word1)[counter]/tot
+
+
+def next3words(inputw,allword,markov):
+    '''Takes input word, locates if word in matrix and outputs the 3 most probable following words. Outputs nothing if user inputted non-word'''
+    firstword = inputw
+    #prevword = input('Write word ')
+    if firstword != allword:
+        pass
+
+    if firstword in allword:     # Kollar efterföljande ord
+        TMarkov = np.transpose(markov)
+        listprob = TMarkov[allword.index(firstword)] # lista med sannolikheter för transponerad matris
+        maxpos = next(i for i, x in enumerate(listprob) if x == listprob.max()) # index för max
+        nextword = allword[maxpos]    # Hittar det ord med störst sannolikhet att komma näst
+
+    return nextword
+
+def main(inputw):
+    allword = []    # listan med alla möjliga ord
+    lentot = len(allword)
+    markov = np.zeros((lentot, lentot))     # Skapar matris med enbart 0or
+    counting_words(worddict, allword, markov)
+    next3words(inputw,allword,markov)
+
+if __name__ == '__main__':
+    user_input = input('Enter word:')
+    main(inputw=user_input)
