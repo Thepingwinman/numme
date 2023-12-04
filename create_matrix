@@ -1,40 +1,51 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-allword = []    # listan med alla unika ord
-textlist = []    # listan med texten i listform
+def nextwordcount_dict(worddict,allword,markov,indexlist,textlist):
+    '''Creates a dictionary of reference words keyed to a dictionary for each possible word keyed to it's occurance counter.'''
+    for word in allword:    #list comprehension for list of each word position of words in data
+        indexlist.append([i for i, x in enumerate(textlist) if x == word])
+    for inde in range(len(indexlist)):
+        listnext = []
+        smalldict = dict()
+        for i in indexlist[inde]:   #traceback to indexlist to create dictionary with following word
+            if i != len(textlist)-1:
+                listnext.append(textlist[i+1]) 
+        listnextuni = list(dict.fromkeys(listnext)) 
+        for i in listnextuni:   #key occurance counter to following word
+            smalldict[i] = listnext.count(i) 
+        worddict[allword[inde]] = smalldict
 
-indexlist = []
-worddict = dict()
-for word in allword:
-    indexlist.append([i for i, x in enumerate(textlist) if x == word])
+    for word1 in worddict: #Adds the probability elements to it's position for the word in the column
+        tot = sum(worddict.get(word1).values())
+        for word in worddict.get(word1).keys(): 
+            markov[allword.index(word), allword.index(word1)] = worddict.get(word1)[word]/tot 
 
-for inde in range(len(indexlist)):
-    listnext = []
-    smalldict = dict()
-    for i in indexlist[inde]:
-	    if i != len(textlist)-1:
-		    listnext.append(textlist[i+1])
-    listnextuni = list(dict.fromkeys(listnext))
-    for i in listnextuni:
-        smalldict[i] = listnext.count(i)
-    worddict[allword[inde]] = smalldict
+def nextthreewords(inputword,allword,markov,lentot):
+    '''Takes input word, locates if word in matrix and outputs the 3 most probable following words. '''
+    if inputword in allword:     #Checks following word
+        wordvector = np.zeros((lentot,1))
+        wordvector[allword.index(inputword),0] = 1
+        for n in range(3):  #Selects highest probable word in column, three times
+            wordvector = markov.dot(wordvector)
+            maxpos = next(i for i, x in enumerate(wordvector) if x == wordvector.max())
+            nextword = allword[maxpos] 
+            print(nextword)
 
-lentot = len(allword)
-Markov = np.zeros((lentot, lentot))     # Skapar matris med enbart 0or
+def main(inputword):
+    allword = []    # listan med alla unika ord
+    if inputword != allword:    #Checks invalid user input
+        print('Invalid word, please try again.')
+        user_input = input('Enter word:')
+        main(inputword=user_input)
+    lentot = len(allword)
+    markov = np.zeros((lentot, lentot)) #Skapar matris med enbart 0or
+    textlist = []   #listan med texten i listform
+    indexlist = []  #tom lista som ska fyllas med ordposition i data
+    worddict = dict()
+    nextwordcount_dict(worddict, allword, markov,indexlist,textlist)
+    nextthreewords(inputword,allword,markov,lentot)
 
-for word1 in worddict:
-    tot = sum(worddict.get(word1).values())
-    for word in worddict.get(word1).keys():
-        Markov[allword.index(word), allword.index(word1)] = worddict.get(word1)[word]/tot
-
-
-prevword = input('Write word ')
-if prevword in allword:     # Kollar efterföljande ord
-    wordvector = np.zeros((lentot,1))
-    wordvector[allword.index(prevword),0] = 1
-    for n in range(3):
-        wordvector = Markov.dot(wordvector)
-        maxpos = next(i for i, x in enumerate(wordvector) if x == wordvector.max())
-        nextword = allword[maxpos]
-        print(nextword)
+if __name__ == '__main__':
+    user_input = input('Enter word:')
+    main(inputword=user_input)
