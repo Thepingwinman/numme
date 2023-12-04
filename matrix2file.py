@@ -49,7 +49,7 @@ def write2file(matrix, file_name):
     with open(file_name, 'w') as outfile:
             outfile.write(matrix)
 
-allword, textlist = get_word_lists()
+textlist, allword = get_word_lists()
 
 ''' 
 allword = []    # listan med alla unika ord
