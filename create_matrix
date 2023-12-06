@@ -1,7 +1,6 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
-def nextwordcount_dict(worddict,allword,markov,indexlist,textlist):
+def nextwordcounter_dict(worddict,allword,markov,indexlist,textlist):
     '''Creates a dictionary of reference words keyed to a dictionary for each possible word keyed to it's occurance counter.'''
     for word in allword:    #list comprehension for list of each word position of words in data
         indexlist.append([i for i, x in enumerate(textlist) if x == word])
@@ -33,19 +32,24 @@ def nextthreewords(inputword,allword,markov,lentot):
             print(nextword)
 
 def main(inputword):
-    allword = []    # listan med alla unika ord
-    if inputword != allword:    #Checks invalid user input
-        print('Invalid word, please try again.')
-        user_input = input('Enter word:')
-        main(inputword=user_input)
+    allword = []
+    '''    allword = ["the", "english","book","from","sound","to","sense","hello","Sir. Durian","you","killed","my","father",",","prepare","die","!","Sir. Jalapeno","that","made","does","not","make", "me","because","in","order","feet","must","for","from","spices",".","get","armpit","fast",]    # listan med alla unika ord'''
+    if inputword not in allword:    #Checks if input word has a following word from data
+        print('___\n___\n___\n')
     lentot = len(allword)
     markov = np.zeros((lentot, lentot)) #Skapar matris med enbart 0or
-    textlist = []   #listan med texten i listform
+    textlist = []
+    '''textlist = ["the","english","book","from","sound","to","sense","hello","Sir. Durian","you","killed","my","father",",","prepare", "to","die","!","hello","Sir. Jalapeno","the","sound","you","made","does","not","make","sense","to", "me","because","in","order","to","sense","my","feet","you","must","prepare", "for","the","sound","from","english","spices",".","to","me",",","you","killed","my","father", "to", "get","to","sense","my","armpit",".","to","die","fast","you","make","me","sense","the","armpit","to","me","because","in","my","father","you","get","to","die","!","hello","Sir. Durian",",","to","me",",","you","killed","the","english","father",".","to","me",",","you","make","spices","."]   #listan med texten i listform'''
     indexlist = []  #tom lista som ska fyllas med ordposition i data
     worddict = dict()
-    nextwordcount_dict(worddict, allword, markov,indexlist,textlist)
+    nextwordcounter_dict(worddict, allword, markov,indexlist,textlist)
     nextthreewords(inputword,allword,markov,lentot)
 
 if __name__ == '__main__':
-    user_input = input('Enter word:')
-    main(inputword=user_input)
+    try:
+        user_input = input('Enter word:')
+    except:
+        print('An error occured, please try again.')
+        user_input = input('Enter word:')
+    finally: 
+        main(inputword=user_input)
