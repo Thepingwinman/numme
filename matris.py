@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 import re
 
@@ -40,31 +39,23 @@ def get_word_lists():
 
     return word_list, unique_word_list
 
-def write2file(matrix, file_name):
-    ''''Writes a matrix to a file.
-    
-    Parameters: 
-    matrix (numpy matrix)
-    file_name (str): name of outfile.
-    
-    Return values: none.'''
-
-    with open(file_name, 'w', encoding="utf-8") as outfile:
-            outfile.write(matrix)
-
-#allword, textlist = get_word_lists()
-
-''' 
-allword = []    # listan med alla unika ord
-textlist = []    # listan med texten i listform
-'''
 def create_matrix(allword, textlist):
+
+    #print(f'Längd av allword: {len(allword)}')
+
+    #allword = allword[0]
+
+    #print(f'\nallword: {allword}\n') #test här
+
     indexlist = []
     worddict = dict()
     for word in allword:
         indexlist.append([i for i, x in enumerate(textlist) if x == word])
 
     for inde in range(len(indexlist)):
+
+        #print(f'\nallword[inde]: {allword[inde]}\n') #test här
+
         listnext = []
         smalldict = dict()
         for i in indexlist[inde]:
@@ -73,6 +64,10 @@ def create_matrix(allword, textlist):
         listnextuni = list(dict.fromkeys(listnext))
         for i in listnextuni:
             smalldict[i] = listnext.count(i)
+
+        #print(f'\nTyp av allword[inde]: {type(allword[inde])}\n') #test här
+        #print(f'\nallword[inde]: {allword[inde]}\n') #test här
+
         worddict[allword[inde]] = smalldict
 
     lentot = len(allword)
@@ -83,19 +78,10 @@ def create_matrix(allword, textlist):
         for word in worddict.get(word1).keys():
                 Markov[allword.index(word), allword.index(word1)] = worddict.get(word1)[word]/tot
 
-    np.save('markov_matrix.npy1', Markov)
-    np.save('lentot_value.npy1', lentot)
+    np.save('markov_matrix.npy', Markov)
+    np.save('lentot_value.npy', lentot)
 
     return Markov, lentot
-
-def write_to_excel(markov):
-    df = pd.DataFrame(markov)
-
-    excel_writer = pd.ExcelWriter('markov.xlsx', engine='xlsxwriter')
-
-    df.to_excel(excel_writer, sheet_name='BarGraphData', index=False)
-
-    excel_writer.close()
 
 def user_word(Markov, lentot, allword):
     prevword = input('Write word ')
@@ -110,10 +96,15 @@ def user_word(Markov, lentot, allword):
 
 def main():
     textlist, allword= get_word_lists()
-    
+
+    #print(f'\nLängd av textlist: {len(textlist)}\n')
+
+    textlist = textlist[0]
+    allword = allword[0]
+
     try:
-        Markov = np.load('markov_matrix1.npy')
-        lentot = np.load('lentot_value1.npy')
+        Markov = np.load('markov_matrix.npy')
+        lentot = np.load('lentot_value.npy')
     except FileNotFoundError:
         Markov, lentot = create_matrix(allword, textlist)
 
