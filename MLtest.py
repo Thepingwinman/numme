@@ -75,4 +75,4 @@ def write2file(word_list, file_name):
         
 if __name__ == '__main__':
     word_list = get_word_list('Andersen.pdf')
-    unique_word_list = get_unique_word_list(word_list)
+    get_unique_word_list(word_list)
